@@ -5,10 +5,13 @@ public partial class GameManager : MonoBehaviour {
 
 	//Game Event System System
 	public delegate void GameStateEvent();
+	public static event GameStateEvent PRE_START;
 	public static event GameStateEvent START;
 	public static event GameStateEvent PAUSE; 
 	public static event GameStateEvent UNPAUSED;
-	public static event GameStateEvent GAME_OVER; 
+	public static event GameStateEvent GAME_OVER;
+	public static event GameStateEvent PRE_GAME_OVER;
+
 	public static event GameStateEvent RESET;
 
 
@@ -18,10 +21,12 @@ public partial class GameManager : MonoBehaviour {
 	void EventHanlderInit(){
 
 		//Event Handlers Initialize
-		Player.OnDeath += OnDeath;				//This statment handles when the player dies
+
 		PAUSE += OnPauseHandler;				//The OnPauseEventHandler, See description bellow.
 		UNPAUSED += OnUnPauseHandler;
 		START += GameReset;
+		PRE_START += PreGameHandler;			//Pre Game Handler, Pre Game Calculations
+		PRE_GAME_OVER += PostGameHandler;		//Post Game Handler, Post Game Calculations
 	
 	}
 
@@ -29,7 +34,7 @@ public partial class GameManager : MonoBehaviour {
 
 	
 		//Event Handlers Remove
-		Player.OnDeath -= OnDeath;				//This statment handles when the player dies
+
 		PAUSE -= OnPauseHandler;				//The OnPauseEventHandler, See description bellow.
 		UNPAUSED -= OnUnPauseHandler;
 		START -= GameReset;
@@ -44,7 +49,7 @@ public partial class GameManager : MonoBehaviour {
 			
 		//Code for on start goes here
 		//This Method Resets the game
-		ChangeState((int)GameState.GameRunning);
+		ChangeState((int)GameState.running);
 		
 		//Set Pause to false
 		PauseGame (false);
@@ -62,7 +67,7 @@ public partial class GameManager : MonoBehaviour {
 		}
 		
 		//Set The Game State
-		ChangeState ((int)GameState.GamePaused);			//This Chanages the state within the manager to Paused State
+		ChangeState ((int)GameState.paused);			//This Chanages the state within the manager to Paused State
 	}
 
 
@@ -80,7 +85,7 @@ public partial class GameManager : MonoBehaviour {
 		
 		
 		//Set The Game State
-		ChangeState ((int)GameState.GameRunning);			//This Chanages the state within the manager to Paused State
+		ChangeState ((int)GameState.running);			//This Chanages the state within the manager to Paused State
 		
 	}
 	
@@ -92,7 +97,7 @@ public partial class GameManager : MonoBehaviour {
 		Debug.Log (msg);
 		
 		//Change The Game State
-		ChangeState ((int)GameState.GameOver);
+		ChangeState ((int)GameState.over);
 		
 		//Send Game Over Event
 		GAME_OVER ();
@@ -102,12 +107,23 @@ public partial class GameManager : MonoBehaviour {
 		
 		
 	}
+
+	// Pre Game Method
+	public void PreGameHandler(){
+
+	
+	}
+
+	public void PostGameHandler(){
+
+	}
 	
 	//6. Game Reset
+	//Resets Game Handlers and removes all the Listeners
 	public void GameReset(){
 		
 		//This Method Resets the game
-		ChangeState((int)GameState.GameRunning);
+		ChangeState((int)GameState.running);
 
 		//Remove Event Handlers
 		EventHandlersRemove ();						//This Removes All The Event Handlers In Play

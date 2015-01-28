@@ -25,14 +25,14 @@ public partial class GameManager : MonoBehaviour {
 
 
 		//Call The Game Start Event
-		START ();
+		PRE_START ();					//On Load for the first time this calls the PRE_START Event.
 
 		//1. Initalize code : State check and load
 		// if state is null load default state
 		if (_gameState == 0) {
 
 				//default game state GAMERUNNING STATE
-				ChangeState ((int)GameState.GameRunning);
+				//ChangeState ((int)GameState.GameRunning);
 
 		} else {
 				
@@ -65,45 +65,6 @@ public partial class GameManager : MonoBehaviour {
 
 
 	//STATE Methods 
-	//1. Change State Method
-	// This method is used to change the state of the game
-	public void ChangeState(int state){
-
-		switch (state) {
-				
-		case (int)GameState.GameRunning:
-			//a. Game Running State
-			if(state == (int)GameState.GameRunning){
-
-					//Game Running Code Goes Here
-				_gameState = (int)GameState.GameRunning;
-			
-			}
-			break;
-		case (int)GameState.GamePaused:
-			//b. Game Paused State
-			if(state == (int)GameState.GamePaused){
-				
-				//Game Paused Code Goes Here
-				_gameState = (int)GameState.GamePaused;
-				
-			}
-			break;
-			case (int)GameState.GameOver:
-			//c. Game Ended State
-			if(state == (int)GameState.GameOver){
-				
-				//Game Ended   Code Goes Here
-				_gameState = (int)GameState.GameOver;
-				
-			}
-			break;
-			
-		}
-
-		//State Changed
-		Debug.Log("State Hase Been Changed" + "  " + (GameState)_gameState);
-	} // End of the Change State Method
 
 	//2. State Handlers
 	//In this section code that controlls the different states are placed here
@@ -150,13 +111,13 @@ public partial class GameManager : MonoBehaviour {
 
 		switch (_gameState) {
 				
-		case (int)GameState.GameRunning:
+		case (int)GameState.running:
 			GameRunningState();
 			break;
-		case (int)GameState.GamePaused:
+		case (int)GameState.paused:
 			GamePausedState();
 			break;
-		case (int)GameState.GameOver:
+		case (int)GameState.over:
 			GameOverState();
 			break;
 		
